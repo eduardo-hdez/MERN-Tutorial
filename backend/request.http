@@ -1,0 +1,29 @@
+GET http://localhost:5001/api/notes
+
+###
+
+POST http://localhost:5001/api/notes
+Content-Type: application/json
+
+{
+    "title": "4th Note",
+    "content": "Buy Christmas decorations ASAP."
+}
+
+###
+
+PUT http://localhost:5001/api/notes/68f29fd85252770efbf80f55
+Content-Type: application/json
+
+{
+    "title": "2nd Note (Updated)",
+    "content": "My name is John Doe."
+}
+
+###
+
+DELETE http://localhost:5001/api/notes/68f3bf689fda7eb21d7889e4
+
+###
+
+GET http://localhost:5001/api/notes/68f3b3b1ab1931175ceb9da1
