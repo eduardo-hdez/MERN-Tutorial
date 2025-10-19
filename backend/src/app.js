@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import path from "path";
 
 import notesRoutes from "./routes/notesRoutes.js";
 import { connectDB } from "./config/database.js";
@@ -10,9 +11,12 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT;
+const __dirname = path.resolve();
 
 // Middlewares (need to be in sequential order)
-app.use(cors()); // Allow cross-origin requests
+if (process.env.NODE_ENV !== "production") {
+  app.use(cors()); // Allow cross-origin requests
+}
 app.use(express.json());
 app.use((req, res, next) => {
   console.log(
@@ -24,6 +28,13 @@ app.use(rateLimiter);
 
 // Routes
 app.use("/api/notes", notesRoutes);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+  });
+}
 
 // Connect to the database then start the app
 connectDB().then(() => {
